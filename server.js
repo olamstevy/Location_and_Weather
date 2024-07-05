@@ -20,16 +20,19 @@ app.get("/api/hello/", async (req, res) => {
 
 		// Get client geo data
 		const client_ip = requestIp.getClientIp(req);
-		const ipapiResponse = await fetch(`https://ipapi.co/${client_ip}/json`);
-		const { city, latitude, longitude } = await ipapiResponse.json();
 
-		if (!city) return returnInternalError(res, "Failed to get location");
+		const city2 = await fetch(`http://ip-api.com/json/${client_ip}`);
+		// const addressResponse = await fetch(`http://ip-api.com/json/myipaddress`);
+		const { city, lat, lon } = await addressResponse.json();
 
-		const weatherDataQuery = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.OPEN_WEATHER_API_KEY}`;
+		if (!city) {
+			return returnInternalError(res, `Failed to get location`);
+		}
+
+		const weatherDataQuery = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=metric&appid=${process.env.OPEN_WEATHER_API_KEY}`;
 		const { temp } = (await (await fetch(weatherDataQuery)).json()).main;
 
-		if (!temp)
-			return returnInternalError(res, "Oops, Please try again later");
+		if (!temp) return returnInternalError(res, "Oops, Please try again later");
 
 		res.status(200).json({
 			client_ip,
