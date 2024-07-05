@@ -26,16 +26,16 @@ app.get("/api/hello/", async (req, res) => {
 		if (!city) return returnInternalError(res, "Failed to get location");
 
 		const weatherDataQuery = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${process.env.OPEN_WEATHER_API_KEY}`;
-		const { temperature } = (await (await fetch(weatherDataQuery)).json()).main;
+		const { temp } = (await (await fetch(weatherDataQuery)).json()).main;
 
-		if (!temperature)
+		if (!temp)
 			return returnInternalError(res, "Oops, Please try again later");
 
 		res.status(200).json({
 			client_ip,
 			location: city,
 			greeting: `Hello, ${visitor_name}!, The temperature is ${Math.round(
-				temperature
+				temp
 			)} degrees Celcius in ${city}`,
 		});
 	} catch (err) {
