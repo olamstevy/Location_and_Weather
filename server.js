@@ -6,7 +6,8 @@ const requestIp = require("request-ip");
 const app = express();
 app.use(express.json());
 
-const returnInternalError = (res, message) => res.status(500).json({ error });
+const returnInternalError = (res, message) =>
+	res.status(500).json({ error: message });
 
 // Required endpoint
 app.get("/api/hello/", async (req, res) => {
