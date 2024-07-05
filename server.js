@@ -21,7 +21,7 @@ app.get("/api/hello/", async (req, res) => {
 		// Get client geo data
 		const client_ip = requestIp.getClientIp(req);
 
-		const city2 = await fetch(`http://ip-api.com/json/${client_ip}`);
+		const addressResponse = await fetch(`http://ip-api.com/json/${client_ip}`);
 		// const addressResponse = await fetch(`http://ip-api.com/json/myipaddress`);
 		const { city, lat, lon } = await addressResponse.json();
 
